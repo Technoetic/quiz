@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문제 목록 - 랜덤 문제 출제 프로그램</title>
+
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="../css/style.css?v=3">
+</head>
+<body>
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast" role="alert" aria-live="polite"></div>
+
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="loading-spinner" style="display:none;">
+        <i class="fas fa-spinner fa-spin"></i>
+        <span>로딩 중...</span>
+    </div>
+
+    <div class="container">
+        <h1>랜덤 문제 출제 프로그램</h1>
+
+        <!-- Tab Buttons -->
+        <div class="tab-buttons" role="tablist">
+            <a href="index.html" class="tab-btn">문제 풀기</a>
+            <a href="admin.html" class="tab-btn">문제 등록</a>
+            <a href="list.html" class="tab-btn active">문제 목록</a>
+            <a href="deleted.html" class="tab-btn">삭제된 문제</a>
+            <a href="settings.html" class="tab-btn">설정</a>
+        </div>
+
+        <!-- List Section -->
+        <div id="list-section" class="list-section">
+            <div class="quiz-filters">
+                <div class="subject-filters">
+                    <button class="filter-btn active">전체</button>
+                    <button class="filter-btn">객관식</button>
+                    <button class="filter-btn">주관식</button>
+                    <button class="filter-btn">순서 나열</button>
+                </div>
+                <div class="search-filter">
+                    <input type="text" id="questionSearchInput" class="search-input" placeholder="문제 내용 검색...">
+                </div>
+            </div>
+            <div class="delete-all-container">
+                <button class="delete-all-btn">
+                    <i class="fas fa-trash-alt"></i> 모든 문제 삭제
+                </button>
+            </div>
+            <div class="question-stats" id="questionStats">
+                <div class="stats-label">문제 통계:</div>
+                <div>전체: <span id="statAll" class="stat-all">0</span></div>
+                <div>객관식: <span id="statMultiple" class="stat-multiple">0</span></div>
+                <div>주관식: <span id="statSubjective" class="stat-subjective">0</span></div>
+                <div>순서 나열: <span id="statSequence" class="stat-sequence">0</span></div>
+            </div>
+            <div class="question-list" id="questionList"></div>
+        </div>
+    </div>
+
+    <!-- Main JavaScript (ES6 Modules) -->
+    <script src="../js/bundle.js"></script>
+</body>
+</html>

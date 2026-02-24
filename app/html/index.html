@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문제 풀기 - 랜덤 문제 출제 프로그램</title>
+
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="../css/style.css?v=3">
+</head>
+<body>
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast" role="alert" aria-live="polite"></div>
+
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="loading-spinner" style="display:none;">
+        <i class="fas fa-spinner fa-spin"></i>
+        <span>로딩 중...</span>
+    </div>
+
+    <div class="container">
+        <h1>랜덤 문제 출제 프로그램</h1>
+
+        <!-- Tab Buttons -->
+        <div class="tab-buttons" role="tablist">
+            <a href="index.html" class="tab-btn active">문제 풀기</a>
+            <a href="admin.html" class="tab-btn">문제 등록</a>
+            <a href="list.html" class="tab-btn">문제 목록</a>
+            <a href="deleted.html" class="tab-btn">삭제된 문제</a>
+            <a href="settings.html" class="tab-btn">설정</a>
+        </div>
+
+        <!-- Quiz Section -->
+        <div id="quiz-section" class="quiz-section">
+            <div class="quiz-filters">
+                <div class="subject-filters">
+                    <select id="subjectDropdown" name="subjectDropdown" class="subject-dropdown">
+                        <option value="">전체</option>
+                    </select>
+                </div>
+            </div>
+            <div id="progress" class="progress">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                    <div class="progress-text">진행 상황: 0/0</div>
+                </div>
+            </div>
+            <h2 id="question">문제가 여기에 표시됩니다.</h2>
+            <div id="question-content"></div>
+            <div id="result" class="result" role="status" aria-live="polite">
+                <span class="result-icon"></span>
+                <span class="result-text"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main JavaScript (ES6 Modules) -->
+    <script src="../js/bundle.js"></script>
+</body>
+</html>

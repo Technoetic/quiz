@@ -1,0 +1,7 @@
+node_modules/
+.claude/
+CLAUDE.md
+app.zip
+fix-db.js
+save-bat.js
+app/data/questions.db

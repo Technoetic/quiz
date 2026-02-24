@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문제 등록 - 랜덤 문제 출제 프로그램</title>
+
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="../css/style.css?v=3">
+</head>
+<body>
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast" role="alert" aria-live="polite"></div>
+
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="loading-spinner" style="display:none;">
+        <i class="fas fa-spinner fa-spin"></i>
+        <span>로딩 중...</span>
+    </div>
+
+    <div class="container">
+        <h1>랜덤 문제 출제 프로그램</h1>
+
+        <!-- Tab Buttons -->
+        <div class="tab-buttons" role="tablist">
+            <a href="index.html" class="tab-btn">문제 풀기</a>
+            <a href="admin.html" class="tab-btn active">문제 등록</a>
+            <a href="list.html" class="tab-btn">문제 목록</a>
+            <a href="deleted.html" class="tab-btn">삭제된 문제</a>
+            <a href="settings.html" class="tab-btn">설정</a>
+        </div>
+
+        <!-- Admin Section -->
+        <div id="admin-section" class="admin-section">
+            <!-- 등록/수정 탭 전환 -->
+            <div class="question-type-select" style="margin-bottom: 8px;">
+                <button id="tab-add" class="tab-btn active" onclick="switchAdminTab('add')" style="display:none;">문제 등록</button>
+                <button id="tab-edit" class="tab-btn" onclick="switchAdminTab('edit')" style="display:none;">문제 수정</button>
+            </div>
+
+            <!-- 등록 섹션 -->
+            <div id="add-section">
+            <div class="question-type-select">
+                <button class="tab-btn active" onclick="toggleQuestionType('multiple')">객관식</button>
+                <button class="tab-btn" onclick="toggleQuestionType('subjective')">주관식</button>
+                <button class="tab-btn" onclick="toggleQuestionType('sequence')">순서 나열</button>
+            </div>
+
+            <!-- Multiple Choice Form -->
+            <form id="multipleChoiceForm" class="form-toggle active">
+                <div class="form-group">
+                    <div style="display: flex; gap: 8px; align-items: flex-start;">
+                        <select id="mcSubject" name="mcSubject" required class="form-control" aria-label="과목 선택" style="flex: 1; margin-bottom: 0;">
+                            <option value="" disabled selected>과목을 선택하세요</option>
+                            <option value="custom">직접 입력</option>
+                        </select>
+                        <button type="button" class="subject-manage-btn" onclick="manageSubjects('mcSubject')" aria-label="과목 관리">🗑️</button>
+                    </div>
+                    <div class="custom-subject-wrapper" id="mcSubjectCustomWrapper" style="display:none; margin-top:10px;">
+                        <input type="text" id="mcSubjectCustom" class="form-control custom-subject-input" placeholder="과목을 입력하세요" aria-label="과목 직접 입력">
+                        <button type="button" class="custom-subject-clear" id="mcSubjectClear" aria-label="직접 입력 취소">✕</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <textarea id="mcQuestion" name="mcQuestion" required placeholder="문제를 입력하세요" aria-label="문제 입력"></textarea>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="option1" name="option1" required placeholder="보기 1번을 입력하세요" aria-label="보기 1 입력">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="option2" name="option2" required placeholder="보기 2번을 입력하세요" aria-label="보기 2 입력">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="option3" name="option3" required placeholder="보기 3번을 입력하세요" aria-label="보기 3 입력">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="option4" name="option4" required placeholder="보기 4번을 입력하세요" aria-label="보기 4 입력">
+                </div>
+                <div class="form-group">
+                    <input type="number" id="mcCorrectAnswer" name="mcCorrectAnswer" min="1" max="4" required placeholder="정답 번호를 입력하세요" aria-label="정답 번호 입력">
+                </div>
+                <button type="submit" class="submit-btn">객관식 문제 등록</button>
+            </form>
+
+            <!-- Subjective Form -->
+            <form id="subjectiveForm" class="form-toggle">
+                <div class="form-group">
+                    <div style="display: flex; gap: 8px; align-items: flex-start;">
+                        <select id="subSubject" name="subSubject" required class="form-control" aria-label="과목 선택" style="flex: 1; margin-bottom: 0;">
+                            <option value="" disabled selected>과목을 선택하세요</option>
+                            <option value="custom">직접 입력</option>
+                        </select>
+                        <button type="button" class="subject-manage-btn" onclick="manageSubjects('subSubject')" aria-label="과목 관리">🗑️</button>
+                    </div>
+                    <div class="custom-subject-wrapper" id="subSubjectCustomWrapper" style="display:none; margin-top:10px;">
+                        <input type="text" id="subSubjectCustom" class="form-control custom-subject-input" placeholder="과목을 입력하세요" aria-label="과목 직접 입력">
+                        <button type="button" class="custom-subject-clear" id="subSubjectClear" aria-label="직접 입력 취소">✕</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <textarea id="subQuestion" name="subQuestion" required placeholder="문제를 입력하세요" aria-label="문제 입력"></textarea>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="subCorrectAnswer" name="subCorrectAnswer" required placeholder="정답을 입력하세요" aria-label="정답 입력">
+                </div>
+                <button type="submit" class="submit-btn">주관식 문제 등록</button>
+            </form>
+
+            <!-- Sequence Form -->
+            <form id="sequenceForm" class="form-toggle">
+                <div class="form-group">
+                    <div style="display: flex; gap: 8px; align-items: flex-start;">
+                        <select id="seqSubject" name="seqSubject" required class="form-control" aria-label="과목 선택" style="flex: 1; margin-bottom: 0;">
+                            <option value="" disabled selected>과목을 선택하세요</option>
+                            <option value="custom">직접 입력</option>
+                        </select>
+                        <button type="button" class="subject-manage-btn" onclick="manageSubjects('seqSubject')" aria-label="과목 관리">🗑️</button>
+                    </div>
+                    <div class="custom-subject-wrapper" id="seqSubjectCustomWrapper" style="display:none; margin-top:10px;">
+                        <input type="text" id="seqSubjectCustom" class="form-control custom-subject-input" placeholder="과목을 입력하세요" aria-label="과목 직접 입력">
+                        <button type="button" class="custom-subject-clear" id="seqSubjectClear" aria-label="직접 입력 취소">✕</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <textarea id="seqQuestion" name="seqQuestion" required placeholder="문제를 입력하세요" aria-label="문제 입력"></textarea>
+                </div>
+                <div id="sequenceItems" class="sequence-items">
+                    <div class="sequence-item">
+                        <input type="text" class="sequence-input" name="sequence-item-1" placeholder="순서 1" required>
+                    </div>
+                    <div class="sequence-item">
+                        <input type="text" class="sequence-input" name="sequence-item-2" placeholder="순서 2" required>
+                    </div>
+                </div>
+                <div class="button-container">
+                    <button type="submit" class="submit-btn">순서 나열 문제 등록</button>
+                    <button type="button" class="add-btn">항목 추가</button>
+                </div>
+            </form>
+            </div> <!-- /add-section -->
+
+            <!-- 수정 섹션 -->
+            <div id="edit-section" style="display:none;">
+                <div class="question-type-select">
+                    <button id="edit-tab-multiple" class="tab-btn active" onclick="switchEditQuestionType('multiple')">객관식</button>
+                    <button id="edit-tab-subjective" class="tab-btn" onclick="switchEditQuestionType('subjective')">주관식</button>
+                    <button id="edit-tab-sequence" class="tab-btn" onclick="switchEditQuestionType('sequence')">순서 나열</button>
+                </div>
+
+                <!-- 객관식 수정 폼 -->
+                <form id="editMcForm" class="form-toggle active">
+                    <div class="form-group">
+                        <select id="editMcSubject" name="editMcSubject" required class="form-control" aria-label="과목 선택">
+                            <option value="" disabled selected>과목을 선택하세요</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="editMcQuestion" name="editMcQuestion" required placeholder="문제를 입력하세요"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="editOption1" name="editOption1" required placeholder="보기 1번">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="editOption2" name="editOption2" required placeholder="보기 2번">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="editOption3" name="editOption3" required placeholder="보기 3번">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="editOption4" name="editOption4" required placeholder="보기 4번">
+                    </div>
+                    <div class="form-group">
+                        <input type="number" id="editMcCorrectAnswer" name="editMcCorrectAnswer" min="1" max="4" required placeholder="정답 번호 (1~4)">
+                    </div>
+                    <div style="display:flex; gap:8px;">
+                        <button type="submit" class="submit-btn">수정 저장</button>
+                        <button type="button" class="submit-btn" style="background:#aaa;" onclick="switchAdminTab('add')">취소</button>
+                    </div>
+                </form>
+
+                <!-- 주관식 수정 폼 -->
+                <form id="editSubForm" class="form-toggle">
+                    <div class="form-group">
+                        <select id="editSubSubject" name="editSubSubject" required class="form-control" aria-label="과목 선택">
+                            <option value="" disabled selected>과목을 선택하세요</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="editSubQuestion" name="editSubQuestion" required placeholder="문제를 입력하세요"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="editSubCorrectAnswer" name="editSubCorrectAnswer" required placeholder="정답을 입력하세요">
+                    </div>
+                    <div style="display:flex; gap:8px;">
+                        <button type="submit" class="submit-btn">수정 저장</button>
+                        <button type="button" class="submit-btn" style="background:#aaa;" onclick="switchAdminTab('add')">취소</button>
+                    </div>
+                </form>
+
+                <!-- 순서 나열 수정 폼 -->
+                <form id="editSeqForm" class="form-toggle">
+                    <div class="form-group">
+                        <select id="editSeqSubject" name="editSeqSubject" required class="form-control" aria-label="과목 선택">
+                            <option value="" disabled selected>과목을 선택하세요</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="editSeqQuestion" name="editSeqQuestion" required placeholder="문제를 입력하세요"></textarea>
+                    </div>
+                    <div id="editSequenceItems" class="sequence-items"></div>
+                    <div style="display:flex; gap:8px;">
+                        <button type="submit" class="submit-btn">수정 저장</button>
+                        <button type="button" class="submit-btn" style="background:#aaa;" onclick="switchAdminTab('add')">취소</button>
+                    </div>
+                </form>
+            </div> <!-- /edit-section -->
+        </div>
+    </div>
+
+    <!-- Subject Management Modal -->
+    <div id="subjectModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>과목 관리</h3>
+                <button type="button" class="modal-close" onclick="closeSubjectModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="color: #666; margin-bottom: 15px;">삭제할 과목을 선택하세요. (기본 과목과 직접 입력한 과목 모두 삭제 가능)</p>
+                <div id="subjectList" class="subject-list">
+                    <!-- Subject items will be dynamically added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main JavaScript (ES6 Modules) -->
+    <script src="../js/bundle.js"></script>
+</body>
+</html>
